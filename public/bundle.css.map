@@ -1,0 +1,14 @@
+{
+  "version": 3,
+  "file": "bundle.css",
+  "sources": [
+    "../src/Board.svelte",
+    "../src/Square.svelte"
+  ],
+  "sourcesContent": [
+    "<script>\n  import Square from \"./Square.svelte\";\n\n  let winner = null;\n  let squares = [null, null, null, null, null, null, null, null, null];\n  let xIsNext = true;\n  $: status = \"Next Player: \" + (xIsNext ? \"X\" : \"0\");\n\n  function restartGame() {\n    squares = [null, null, null, null, null, null, null, null, null];\n    xIsNext = true;\n    winner = null;\n  }\n\n  function handleClick(i) {\n    if (!squares[i]) {\n      squares[i] = xIsNext ? \"X\" : \"0\";\n      xIsNext = !xIsNext;\n      winner = calculateWinner(squares);\n    }\n  }\n\n  function calculateWinner(squares) {\n    const winningCombo = [\n      [0, 1, 2],\n      [3, 4, 5],\n      [6, 7, 8],\n      [0, 3, 6],\n      [1, 4, 7],\n      [2, 5, 8],\n      [0, 4, 8],\n      [2, 4, 6]\n    ];\n    for (let i = 0; i < winningCombo.length; i++) {\n      const [a, b, c] = winningCombo[i];\n      if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c])\n        return `Winner: ${squares[a]}`;\n    }\n\n    const isDraw = squares.every(square => square !== null);\n    return isDraw ? \"It's a draw\" : null;\n  }\n</script>\n\n<style>\n  h3 {\n    color: red;\n  }\n\n  .board {\n    display: flex;\n    flex-wrap: wrap;\n    width: 300px;\n  }\n</style>\n\n{#if winner}\n  <h3>{winner}</h3>\n{:else}\n  <h3>{status}</h3>\n{/if}\n\n<div class=\"board\">\n  {#each squares as square, i}\n    <Square value={square} handleClick={() => handleClick(i)} />\n  {/each}\n</div>\n\n{#if winner}\n  <button on:click={restartGame}>Restart Game</button>\n{/if}\n",
+    "<script>\n  export let value;\n  export let handleClick;\n</script>\n\n<style>\n  .square {\n    flex: 1 0 25%;\n    width: 50px;\n    height: 70px;\n    background-color: whitesmoke;\n    border: 2px solid black;\n    margin: 5px;\n    padding: 5px;\n    font-size: 20px;\n    text-align: center;\n  }\n\n  .square:hover {\n    border: 2px solid red;\n  }\n</style>\n\n<button class=\"square\" on:click={handleClick}>{value || ''}</button>\n"
+  ],
+  "names": [],
+  "mappings": "AA6CE,EAAE,cAAC,CAAC,AACF,KAAK,CAAE,GAAG,AACZ,CAAC,AAED,MAAM,cAAC,CAAC,AACN,OAAO,CAAE,IAAI,CACb,SAAS,CAAE,IAAI,CACf,KAAK,CAAE,KAAK,AACd,CAAC;AC/CD,OAAO,eAAC,CAAC,AACP,IAAI,CAAE,CAAC,CAAC,CAAC,CAAC,GAAG,CACb,KAAK,CAAE,IAAI,CACX,MAAM,CAAE,IAAI,CACZ,gBAAgB,CAAE,UAAU,CAC5B,MAAM,CAAE,GAAG,CAAC,KAAK,CAAC,KAAK,CACvB,MAAM,CAAE,GAAG,CACX,OAAO,CAAE,GAAG,CACZ,SAAS,CAAE,IAAI,CACf,UAAU,CAAE,MAAM,AACpB,CAAC,AAED,sBAAO,MAAM,AAAC,CAAC,AACb,MAAM,CAAE,GAAG,CAAC,KAAK,CAAC,GAAG,AACvB,CAAC"
+}
